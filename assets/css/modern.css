@@ -1,0 +1,407 @@
+/* Modern UI Overrides */
+
+/* Import Inter Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #10b981;
+    /* Green */
+    --primary-hover: #059669;
+    --secondary-color: #64748b;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --info-color: #3b82f6;
+    --light-bg: #f0fdf4;
+    /* Light green tint */
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+}
+
+body {
+    font-family: 'Inter', sans-serif !important;
+    background-color: var(--light-bg);
+    color: var(--text-main);
+}
+
+/* Card Styling */
+.card {
+    background-color: var(--card-bg) !important;
+    box-shadow: var(--shadow-md) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-lg) !important;
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.card-header {
+    background-color: transparent !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 1.25rem 1.5rem !important;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+}
+
+.card-title {
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 1.1rem;
+}
+
+/* Buttons */
+.btn {
+    border-radius: var(--radius-md) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    box-shadow: var(--shadow-sm) !important;
+    transition: all 0.2s ease;
+    text-transform: none;
+    letter-spacing: 0.01em;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #10b981, #059669) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, #059669, #047857) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md) !important;
+}
+
+/* Form Controls */
+.form-control {
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 0.6rem 1rem !important;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    background-color: #fff;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Navbar */
+.main-header {
+    background-color: #10b981 !important;
+    /* Bright Green */
+    box-shadow: var(--shadow-sm) !important;
+    border-bottom: none !important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #ffffff !important;
+    /* White text on green header */
+    font-weight: 500;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #f0fdf4 !important;
+}
+
+/* Sidebar */
+.main-sidebar {
+    background-color: #ffffff !important;
+    /* White Sidebar */
+    box-shadow: var(--shadow-md) !important;
+    border-right: 1px solid var(--border-color) !important;
+}
+
+.brand-link {
+    border-bottom: 1px solid var(--border-color) !important;
+    background-color: #ffffff !important;
+    /* White Brand Area */
+    color: #064e3b !important;
+    /* Dark Green Text */
+}
+
+.brand-link .brand-text {
+    color: #064e3b !important;
+    font-weight: 700 !important;
+}
+
+.user-panel .info a {
+    color: #064e3b !important;
+    /* Dark Green User Name */
+    font-weight: 600;
+}
+
+.nav-sidebar .nav-link {
+    border-radius: var(--radius-md) !important;
+    color: #064e3b !important;
+    /* Dark Green Links */
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.nav-sidebar .nav-link:hover {
+    background-color: #f0fdf4 !important;
+    /* Light Green Hover */
+    color: #059669 !important;
+    /* Slightly lighter green text */
+}
+
+.nav-sidebar .nav-link.active {
+    background-color: #10b981 !important;
+    /* Bright Green Active */
+    color: #fff !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.nav-sidebar .nav-icon {
+    color: #10b981;
+    /* Bright Green Icons */
+}
+
+.nav-sidebar .nav-link.active .nav-icon {
+    color: #fff;
+}
+
+.nav-sidebar .nav-link:hover .nav-icon {
+    color: #059669;
+}
+
+/* Tables */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    border-top: none !important;
+    border-bottom: 2px solid var(--border-color) !important;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    background-color: #f0fdf4;
+    /* Light Green Header */
+    padding: 1rem !important;
+}
+
+.table td {
+    vertical-align: middle !important;
+    border-top: 1px solid var(--border-color) !important;
+    color: var(--text-main);
+    padding: 1rem !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8fafc;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f0fdf4;
+    /* Light Green Hover */
+}
+
+/* Badges */
+.badge {
+    padding: 0.5em 0.8em !important;
+    border-radius: 2rem !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem;
+    letter-spacing: 0.025em;
+}
+
+.badge-success {
+    background-color: #d1fae5 !important;
+    color: #065f46 !important;
+}
+
+.badge-warning {
+    background-color: #fef3c7 !important;
+    color: #92400e !important;
+}
+
+.badge-danger {
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
+}
+
+.badge-info {
+    background-color: #dbeafe !important;
+    color: #1e40af !important;
+}
+
+.badge-secondary {
+    background-color: #f1f5f9 !important;
+    color: #475569 !important;
+}
+
+/* Small Box (Dashboard Stats) */
+.small-box {
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-md) !important;
+    overflow: hidden;
+    border: none;
+    transition: transform 0.2s ease;
+}
+
+.small-box:hover {
+    transform: translateY(-5px);
+}
+
+.small-box .inner {
+    padding: 1.5rem !important;
+}
+
+.small-box h3 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.small-box p {
+    font-size: 1rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.small-box .icon {
+    top: 1rem;
+    right: 1rem;
+    opacity: 0.2;
+    font-size: 4rem;
+}
+
+/* Alerts */
+.alert {
+    border-radius: var(--radius-md) !important;
+    border: none !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* Login Page Modern Redesign - Fresh Green */
+.login-page {
+    background: linear-gradient(135deg, #6ee7b7 0%, #10b981 100%);
+    /* Brighter Green */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.login-box {
+    width: 400px !important;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    padding: 40px;
+    border-top: 6px solid #10b981;
+    /* Green accent top */
+}
+
+.login-logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-logo img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.login-logo a {
+    display: block;
+    color: #065f46 !important;
+    /* Dark Green */
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.login-box-msg {
+    color: #059669;
+    /* Green text */
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+}
+
+.input-group {
+    margin-bottom: 20px !important;
+}
+
+.input-group .form-control {
+    border-right: 0;
+    height: 50px;
+    padding-left: 15px;
+    font-size: 1rem;
+    background-color: #f0fdf4;
+    /* Very light green bg */
+    border-color: #d1fae5;
+    color: #064e3b;
+}
+
+.input-group .form-control:focus {
+    background-color: #fff;
+    border-color: #10b981 !important;
+    box-shadow: none !important;
+}
+
+.input-group-append .input-group-text {
+    background-color: #f0fdf4;
+    border-left: 0;
+    border-color: #d1fae5;
+    color: #10b981;
+    /* Green Icon */
+    width: 45px;
+    justify-content: center;
+}
+
+.input-group .form-control:focus+.input-group-append .input-group-text {
+    background-color: #fff;
+    border-color: #10b981;
+    color: #059669;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #10b981, #059669) !important;
+    border: none !important;
+    height: 50px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4) !important;
+    background: linear-gradient(to right, #059669, #047857) !important;
+}
+
+.icheck-primary label {
+    color: #065f46;
+    font-size: 0.9rem;
+    font-weight: 600;
+}

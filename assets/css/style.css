@@ -1,0 +1,47 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.sidebar {
+    min-height: 100vh;
+    background-color: #343a40;
+    color: white;
+}
+
+.sidebar a {
+    color: #adb5bd;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+}
+
+.sidebar a:hover, .sidebar a.active {
+    color: white;
+    background-color: #495057;
+}
+
+.content {
+    padding: 20px;
+}
+
+.card {
+    margin-bottom: 20px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.status-draft { badge-color: #6c757d; }
+.status-submitted { badge-color: #17a2b8; }
+.status-approved { badge-color: #28a745; }
+.status-rejected { badge-color: #dc3545; }
+.status-revision { badge-color: #ffc107; }

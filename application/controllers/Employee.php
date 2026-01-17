@@ -64,8 +64,8 @@ class Employee extends CI_Controller {
                             $message = 'Waktu mulai harus lebih awal dari waktu selesai.';
                         } elseif (strlen($this->input->post('description')) < 10) {
                             $message = 'Deskripsi kegiatan minimal 10 karakter.';
-                        } elseif (strlen($this->input->post('output')) < 5) {
-                            $message = 'Output kegiatan minimal 5 karakter.';
+                        } elseif (strlen($this->input->post('output')) < 1) {
+                            $message = 'Output kegiatan minimal 1 karakter.';
                         } else {
                             $data = [
                                 'logbook_id' => $logbook_id,
@@ -86,8 +86,8 @@ class Employee extends CI_Controller {
                             $message = 'Waktu mulai harus lebih awal dari waktu selesai.';
                         } elseif (strlen($this->input->post('description')) < 10) {
                             $message = 'Deskripsi kegiatan minimal 10 karakter.';
-                        } elseif (strlen($this->input->post('output')) < 5) {
-                            $message = 'Output kegiatan minimal 5 karakter.';
+                        } elseif (strlen($this->input->post('output')) < 1) {
+                            $message = 'Output kegiatan minimal 1 karakter.';
                         } else {
                             $data = [
                                 'id' => $this->input->post('detail_id'),

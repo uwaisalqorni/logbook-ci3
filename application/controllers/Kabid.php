@@ -42,54 +42,7 @@ class Kabid extends CI_Controller {
         $this->load->view('kabid/dashboard', ['data' => $data]);
     }
 
-    public function report() {
-        $user_id = $this->session->userdata('user_id');
-        $unit_id = $this->session->userdata('unit_id');
 
-        // Get units assigned to Kabid
-        $assigned_units = $this->Unit_model->getUnitsByKabid($user_id);
-        if (empty($assigned_units)) {
-            $target_units = [$unit_id]; // Force array for consistency
-        } else {
-            $target_units = $assigned_units;
-        }
-
-        // Fetch unit details for dropdown
-        $units = [];
-        foreach ($target_units as $uid) {
-            $units[] = $this->Unit_model->getUnitById($uid);
-        }
-
-        $logbooks = [];
-        $start_date = $this->input->get('start_date') ?: date('Y-m-01');
-        $end_date = $this->input->get('end_date') ?: date('Y-m-d');
-        $selected_unit = $this->input->get('unit_id');
-        $selected_role = $this->input->get('role');
-
-        if ($this->input->get('filter')) {
-            // If specific unit selected, check if it's in assigned list
-            if ($selected_unit && in_array($selected_unit, $target_units)) {
-                $filter_unit = $selected_unit;
-            } else {
-                $filter_unit = $target_units;
-            }
-            
-            // Use new method to get detailed report
-            $logbooks = $this->Logbook_model->getLogbookReportDetails($start_date, $end_date, $filter_unit, $selected_role);
-        }
-
-        $data = [
-            'title' => 'Laporan Logbook',
-            'units' => $units,
-            'logbooks' => $logbooks,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'selected_unit' => $selected_unit,
-            'selected_role' => $selected_role
-        ];
-
-        $this->load->view('kabid/report', ['data' => $data]);
-    }
 
     public function validation() {
         $user_id = $this->session->userdata('user_id');

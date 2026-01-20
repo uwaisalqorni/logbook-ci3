@@ -430,17 +430,38 @@ class Logbook_model extends CI_Model {
         $query = $this->db->query($sql, array($logbook_id));
         return $query->row_array();
     }
-    public function getEffectivenessByUnit($unit_id, $start_date, $end_date) {
-        $sql = "SELECT u.name as user_name, u.nik, l.date, 
+    public function getEffectivenessByUnit($unit_id, $start_date, $end_date, $employee_id = null, $period_type = 'daily') {
+        $select_date = "l.date";
+        $group_by = "u.id, l.date";
+        $order_by = "l.date DESC, u.name ASC";
+
+        if ($period_type == 'weekly') {
+            $select_date = "CONCAT(YEAR(l.date), ' - Week ', WEEK(l.date)) as period";
+            $group_by = "u.id, YEAR(l.date), WEEK(l.date)";
+            $order_by = "YEAR(l.date) DESC, WEEK(l.date) DESC, u.name ASC";
+        } elseif ($period_type == 'monthly') {
+            $select_date = "DATE_FORMAT(l.date, '%Y-%m') as period";
+            $group_by = "u.id, YEAR(l.date), MONTH(l.date)";
+            $order_by = "YEAR(l.date) DESC, MONTH(l.date) DESC, u.name ASC";
+        }
+
+        $sql = "SELECT u.name as user_name, u.nik, $select_date, 
                        SUM(TIMESTAMPDIFF(MINUTE, ld.start_time, ld.end_time)) as total_minutes
                 FROM users u
                 JOIN logbooks l ON u.id = l.user_id
                 JOIN logbook_details ld ON l.id = ld.logbook_id
-                WHERE u.unit_id = ? AND l.date BETWEEN ? AND ? AND l.status IN ('submitted', 'approved', 'rejected')
-                GROUP BY u.id, l.date
-                ORDER BY l.date DESC, u.name ASC";
+                WHERE u.unit_id = ? AND l.date BETWEEN ? AND ? AND l.status IN ('submitted', 'approved', 'rejected')";
         
-        $query = $this->db->query($sql, array($unit_id, $start_date, $end_date));
+        $binds = array($unit_id, $start_date, $end_date);
+
+        if ($employee_id) {
+            $sql .= " AND u.id = ?";
+            $binds[] = $employee_id;
+        }
+
+        $sql .= " GROUP BY $group_by ORDER BY $order_by";
+        
+        $query = $this->db->query($sql, $binds);
         return $query->result_array();
     }
 }

@@ -106,4 +106,9 @@ class User_model extends CI_Model {
         $row = $query->row_array();
         return $row['total'];
     }
+    public function getEmployeesByUnit($unit_id) {
+        $sql = "SELECT * FROM users WHERE unit_id = ? AND role = 'employee' AND status = 'active' ORDER BY name ASC";
+        $query = $this->db->query($sql, array($unit_id));
+        return $query->result_array();
+    }
 }

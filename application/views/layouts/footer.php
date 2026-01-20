@@ -16,6 +16,10 @@
 <script src="<?php echo base_url(); ?>assets/adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo base_url(); ?>assets/adminLTE/dist/js/adminlte.min.js"></script>
+<!-- Moment.js -->
+<script src="<?php echo base_url(); ?>assets/adminLTE/plugins/moment/moment.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="<?php echo base_url(); ?>assets/adminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 <!-- SweetAlert2 -->
 <script src="<?php echo base_url(); ?>assets/adminLTE/plugins/sweetalert2/sweetalert2.min.js"></script>
 </body>

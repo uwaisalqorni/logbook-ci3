@@ -61,22 +61,32 @@
             <?php endif; ?>
 
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label>Jam Mulai</label>
-                        <input type="time" name="start_time" class="form-control" required value="<?php echo $data['edit_data']['start_time'] ?? ''; ?>">
+                        <label class="small text-muted">Jam Mulai</label>
+                        <div class="input-group date" id="start_time_picker" data-target-input="nearest">
+                            <input type="text" name="start_time" class="form-control form-control-sm datetimepicker-input" data-target="#start_time_picker" required value="<?php echo $data['edit_data']['start_time'] ?? ''; ?>"/>
+                            <div class="input-group-append" data-target="#start_time_picker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label>Jam Selesai</label>
-                        <input type="time" name="end_time" class="form-control" required value="<?php echo $data['edit_data']['end_time'] ?? ''; ?>">
+                        <label class="small text-muted">Jam Selesai</label>
+                        <div class="input-group date" id="end_time_picker" data-target-input="nearest">
+                            <input type="text" name="end_time" class="form-control form-control-sm datetimepicker-input" data-target="#end_time_picker" required value="<?php echo $data['edit_data']['end_time'] ?? ''; ?>"/>
+                            <div class="input-group-append" data-target="#end_time_picker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
-                        <label>Jenis Kegiatan</label>
-                        <select name="activity_type_id" class="form-control" required>
+                        <label class="small text-muted">Jenis Kegiatan</label>
+                        <select name="activity_type_id" class="form-control" style="height: 45px;" required>
                             <option value="">-- Pilih --</option>
                             <?php foreach ($data['activity_types'] as $type): ?>
                                 <option value="<?php echo $type['id']; ?>" <?php echo (isset($data['edit_data']['activity_type_id']) && $data['edit_data']['activity_type_id'] == $type['id']) ? 'selected' : ''; ?>><?php echo $type['name']; ?></option>
@@ -84,30 +94,37 @@
                         </select>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>Uraian Kegiatan</label>
-                <textarea name="description" class="form-control" rows="3" required><?php echo htmlspecialchars($data['edit_data']['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
-                        <label>Output / Jumlah Pasien</label>
-                        <input type="text" name="output" class="form-control" value="<?php echo htmlspecialchars($data['edit_data']['output'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                        <label class="small text-muted">Output / Jumlah Pasien</label>
+                        <input type="text" name="output" class="form-control" style="height: 45px;" value="<?php echo htmlspecialchars($data['edit_data']['output'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" placeholder="Contoh: 1 Pasien">
                     </div>
                 </div>
-                <div class="col-md-6">
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
                     <div class="form-group">
-                        <label>Kendala (Jika ada)</label>
-                        <input type="text" name="kendala" class="form-control" value="<?php echo htmlspecialchars($data['edit_data']['kendala'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                        <label class="small text-muted">Uraian Kegiatan</label>
+                        <textarea name="description" class="form-control form-control-sm" rows="2" required placeholder="Deskripsikan kegiatan secara detail..."><?php echo htmlspecialchars($data['edit_data']['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="small text-muted">Kendala (Opsional)</label>
+                        <textarea name="kendala" class="form-control form-control-sm" rows="2" placeholder="Jika ada kendala..."><?php echo htmlspecialchars($data['edit_data']['kendala'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
                     </div>
                 </div>
             </div>
             
-            <button type="submit" class="btn btn-primary" <?php echo $is_final ? 'disabled' : ''; ?>><?php echo !empty($data['edit_data']) ? 'Update Kegiatan' : 'Tambah Kegiatan'; ?></button>
-            <?php if (!empty($data['edit_data'])): ?>
-                <a href="<?php echo base_url(); ?>employee/logbook?date=<?php echo $data['date']; ?>" class="btn btn-secondary">Batal</a>
-            <?php endif; ?>
+            <div class="text-right">
+                <?php if (!empty($data['edit_data'])): ?>
+                    <a href="<?php echo base_url(); ?>employee/logbook?date=<?php echo $data['date']; ?>" class="btn btn-secondary btn-sm">Batal</a>
+                <?php endif; ?>
+                <button type="submit" class="btn btn-primary btn-sm px-4" <?php echo $is_final ? 'disabled' : ''; ?>>
+                    <i class="fas fa-save"></i> <?php echo !empty($data['edit_data']) ? 'Update' : 'Simpan'; ?>
+                </button>
+            </div>
         </form>
     </div>
 </div>
@@ -121,26 +138,28 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th>Waktu</th>
-                    <th>Jenis</th>
+                    <th style="width: 5%;">No</th>
+                    <th style="width: 15%;">Waktu</th>
+                    <th style="width: 15%;">Jenis</th>
                     <th>Uraian</th>
-                    <th>Output</th>
-                    <th>Kendala</th>
-                    <th>Aksi</th>
+                    <th style="width: 15%;">Output</th>
+                    <th style="width: 15%;">Kendala</th>
+                    <th >Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($data['activities'])): ?>
-                    <tr><td colspan="6" class="text-center">Belum ada kegiatan.</td></tr>
+                    <tr><td colspan="7" class="text-center">Belum ada kegiatan.</td></tr>
                 <?php else: ?>
-                    <?php foreach ($data['activities'] as $activity): ?>
+                    <?php $no = 1; foreach ($data['activities'] as $activity): ?>
                     <tr>
-                        <td><?php echo date('H:i', strtotime($activity['start_time'])) . ' - ' . date('H:i', strtotime($activity['end_time'])); ?></td>
-                        <td><?php echo htmlspecialchars($activity['activity_name']); ?></td>
-                        <td><?php echo nl2br(htmlspecialchars($activity['description'])); ?></td>
-                        <td><?php echo htmlspecialchars($activity['output']); ?></td>
-                        <td><?php echo htmlspecialchars($activity['kendala']); ?></td>
-                        <td>
+                        <td class="align-top"><?php echo $no++; ?></td>
+                        <td class="align-top"><?php echo date('H:i', strtotime($activity['start_time'])) . ' - ' . date('H:i', strtotime($activity['end_time'])); ?></td>
+                        <td class="align-top"><?php echo htmlspecialchars($activity['activity_name']); ?></td>
+                        <td class="align-top" style="word-wrap: break-word; word-break: break-word; white-space: normal; text-align: justify;"><?php echo nl2br(htmlspecialchars($activity['description'])); ?></td>
+                        <td class="align-top"><?php echo htmlspecialchars($activity['output']); ?></td>
+                        <td class="align-top"><?php echo htmlspecialchars($activity['kendala']); ?></td>
+                        <td class="align-top">
                             <?php if (!$is_final): ?>
                             <a href="<?php echo base_url(); ?>employee/logbook?date=<?php echo $data['date']; ?>&edit_id=<?php echo $activity['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
                             <?php echo form_open('', ['style' => 'display:inline;', 'onsubmit' => "return confirm('Hapus kegiatan ini?');"]); ?>
@@ -181,3 +200,16 @@
 </div>
 
 <?php $this->load->view('layouts/footer'); ?>
+
+<script>
+    $(function () {
+        $('#start_time_picker').datetimepicker({
+            format: 'HH:mm',
+            use24hours: true
+        });
+        $('#end_time_picker').datetimepicker({
+            format: 'HH:mm',
+            use24hours: true
+        });
+    });
+</script>

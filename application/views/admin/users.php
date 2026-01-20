@@ -128,7 +128,7 @@
                         <div class="modal fade" id="editModal<?php echo $user['id']; ?>" tabindex="-1">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
-                                    <form method="POST">
+                                    <?php echo form_open(''); ?>
                                         <div class="modal-header">
                                             <h5 class="modal-title">Edit Pegawai</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -181,7 +181,7 @@
                                                 <select name="golongan" class="form-control">
                                                     <option value="">-- Pilih Golongan --</option>
                                                     <?php 
-                                                    $golongans = ['PK I', 'PK II', 'PK III', 'PK IV', 'PK V', 'Non PK'];
+                                                    $golongans = ['Medis', 'Non Medis'];
                                                     foreach ($golongans as $gol) {
                                                         $selected = ($user['golongan'] == $gol) ? 'selected' : '';
                                                         echo "<option value='$gol' $selected>$gol</option>";
@@ -210,7 +210,7 @@
                         <div class="modal fade" id="deleteModal<?php echo $user['id']; ?>" tabindex="-1">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form method="POST">
+                                    <?php echo form_open(''); ?>
                                         <div class="modal-header">
                                             <h5 class="modal-title">Hapus Pegawai</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">

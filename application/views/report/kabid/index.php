@@ -57,6 +57,12 @@
     <div class="card-header">
         <h3 class="card-title">Hasil Laporan</h3>
         <div class="card-tools">
+            <a href="<?php echo base_url('reportkabid/export?type=excel&start_date=' . $data['start_date'] . '&end_date=' . $data['end_date'] . '&unit_id=' . $data['selected_unit'] . '&role=' . $data['selected_role']); ?>" class="btn btn-tool text-success">
+                <i class="fas fa-file-excel"></i> Excel
+            </a>
+            <a href="<?php echo base_url('reportkabid/export?type=pdf&start_date=' . $data['start_date'] . '&end_date=' . $data['end_date'] . '&unit_id=' . $data['selected_unit'] . '&role=' . $data['selected_role']); ?>" class="btn btn-tool text-danger">
+                <i class="fas fa-file-pdf"></i> PDF
+            </a>
             <button type="button" class="btn btn-tool" onclick="window.print()">
                 <i class="fas fa-print"></i> Print
             </button>

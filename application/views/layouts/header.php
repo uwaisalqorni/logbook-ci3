@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/adminLTE/dist/css/adminlte.min.css">
   <!-- SweetAlert2 -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/adminLTE/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/adminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- Modern CSS -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/modern.css?v=<?php echo time(); ?>">
 </head>
@@ -187,7 +189,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?php echo base_url(); ?>kabid/report" class="nav-link">
+            <a href="<?php echo base_url(); ?>reportkabid" class="nav-link">
               <i class="nav-icon fas fa-file-alt"></i>
               <p>Laporan Logbook</p>
             </a>

@@ -269,7 +269,7 @@ class Head extends CI_Controller {
             'total_pages' => $total_pages
         ];
 
-        $this->load->view('head/report', ['data' => $data]);
+        $this->load->view('report/head/index', ['data' => $data]);
     }
 
     public function export() {
@@ -394,26 +394,38 @@ class Head extends CI_Controller {
         $unit_id = $this->session->userdata('unit_id');
         $start_date = $this->input->get('start_date') ?? date('Y-m-01');
         $end_date = $this->input->get('end_date') ?? date('Y-m-d');
+        $employee_id = $this->input->get('employee_id');
+        $period_type = $this->input->get('period_type') ?? 'daily';
 
-        $effectiveness_data = $this->Logbook_model->getEffectivenessByUnit($unit_id, $start_date, $end_date);
+        $effectiveness_data = $this->Logbook_model->getEffectivenessByUnit($unit_id, $start_date, $end_date, $employee_id, $period_type);
+        $employees = $this->User_model->getEmployeesByUnit($unit_id);
 
         $data = [
             'title' => 'Laporan Efektifitas',
             'effectiveness_data' => $effectiveness_data,
             'start_date' => $start_date,
-            'end_date' => $end_date
+            'end_date' => $end_date,
+            'employees' => $employees,
+            'selected_employee' => $employee_id,
+            'period_type' => $period_type
         ];
 
-        $this->load->view('head/effectiveness', ['data' => $data]);
+        $this->load->view('report/head/effectiveness', ['data' => $data]);
     }
 
     public function export_effectiveness() {
         $unit_id = $this->session->userdata('unit_id');
         $start_date = $this->input->get('start_date') ?? date('Y-m-01');
         $end_date = $this->input->get('end_date') ?? date('Y-m-d');
+        $employee_id = $this->input->get('employee_id');
+        $period_type = $this->input->get('period_type') ?? 'daily';
         $type = $this->input->get('type') ?? 'excel';
 
-        $effectiveness_data = $this->Logbook_model->getEffectivenessByUnit($unit_id, $start_date, $end_date);
+        $effectiveness_data = $this->Logbook_model->getEffectivenessByUnit($unit_id, $start_date, $end_date, $employee_id, $period_type);
+
+        $period_label = 'Tanggal';
+        if ($period_type == 'weekly') $period_label = 'Minggu';
+        if ($period_type == 'monthly') $period_label = 'Bulan';
 
         if ($type == 'excel') {
             $spreadsheet = new Spreadsheet();
@@ -423,7 +435,7 @@ class Head extends CI_Controller {
             $sheet->setCellValue('A1', 'Laporan Efektifitas Jam Kerja');
             $sheet->setCellValue('A2', 'Periode: ' . $start_date . ' s/d ' . $end_date);
             
-            $headers = ['No', 'Tanggal', 'Nama Pegawai', 'NIK', 'Total Jam Kerja (Menit)', 'Total Jam Kerja (Jam)'];
+            $headers = ['No', $period_label, 'Nama Pegawai', 'NIK', 'Total Jam Kerja (Menit)', 'Total Jam Kerja (Jam)'];
             $col = 'A';
             foreach ($headers as $header) {
                 $sheet->setCellValue($col . '4', $header);
@@ -434,12 +446,22 @@ class Head extends CI_Controller {
             $no = 1;
             foreach ($effectiveness_data as $item) {
                 $sheet->setCellValue('A' . $row, $no++);
-                $sheet->setCellValue('B' . $row, $item['date']);
+                
+                $date_val = $item['date'] ?? $item['period'];
+                if ($period_type == 'daily') {
+                    $date_val = date('d/m/Y', strtotime($date_val));
+                }
+                
+                $sheet->setCellValue('B' . $row, $date_val);
                 $sheet->setCellValue('C' . $row, $item['user_name']);
                 $sheet->setCellValue('D' . $row, $item['nik']);
                 $sheet->setCellValue('E' . $row, $item['total_minutes']);
                 $sheet->setCellValue('F' . $row, round($item['total_minutes'] / 60, 2));
                 $row++;
+            }
+
+            foreach (range('A', 'F') as $columnID) {
+                $sheet->getColumnDimension($columnID)->setAutoSize(true);
             }
 
             $writer = new Xlsx($spreadsheet);
@@ -457,7 +479,7 @@ class Head extends CI_Controller {
             $html .= '<table border="1" style="width:100%; border-collapse: collapse; font-size: 12px;">';
             $html .= '<thead><tr>
                         <th>No</th>
-                        <th>Tanggal</th>
+                        <th>' . $period_label . '</th>
                         <th>Nama Pegawai</th>
                         <th>NIK</th>
                         <th>Total Menit</th>
@@ -466,9 +488,14 @@ class Head extends CI_Controller {
             
             $no = 1;
             foreach ($effectiveness_data as $item) {
+                $date_val = $item['date'] ?? $item['period'];
+                if ($period_type == 'daily') {
+                    $date_val = date('d/m/Y', strtotime($date_val));
+                }
+
                 $html .= '<tr>
                             <td>' . $no++ . '</td>
-                            <td>' . $item['date'] . '</td>
+                            <td>' . $date_val . '</td>
                             <td>' . $item['user_name'] . '</td>
                             <td>' . $item['nik'] . '</td>
                             <td>' . $item['total_minutes'] . '</td>

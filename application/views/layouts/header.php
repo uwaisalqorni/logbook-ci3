@@ -78,6 +78,12 @@
               <p>Master Pegawai</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>admin/user_groups" class="nav-link">
+              <i class="nav-icon fas fa-layer-group"></i>
+              <p>Group Pengguna</p>
+            </a>
+          </li>
           <?php endif; ?>
 
           <?php if ($_SESSION['role'] == 'management'): ?>
@@ -136,9 +142,54 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="<?php echo base_url(); ?>head/logbook" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>Input Logbook</p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="<?php echo base_url(); ?>head/validation" class="nav-link">
               <i class="nav-icon fas fa-check-circle"></i>
               <p>Validasi Logbook</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>head/report" class="nav-link">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>Laporan Logbook</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>head/effectiveness" class="nav-link">
+              <i class="nav-icon fas fa-chart-line"></i>
+              <p>Efektifitas</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>head/history" class="nav-link">
+              <i class="nav-icon fas fa-history"></i>
+              <p>Riwayat Logbook</p>
+            </a>
+          </li>
+          <?php endif; ?>
+
+          <?php if ($_SESSION['role'] == 'kabid'): ?>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>kabid/dashboard" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>kabid/validation" class="nav-link">
+              <i class="nav-icon fas fa-check-circle"></i>
+              <p>Validasi Logbook</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url(); ?>kabid/report" class="nav-link">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>Laporan Logbook</p>
             </a>
           </li>
           <?php endif; ?>

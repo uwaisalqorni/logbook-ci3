@@ -33,4 +33,20 @@ class Unit_model extends CI_Model {
     public function countUnits() {
         return $this->db->count_all('units');
     }
+
+    public function getUnitsByKabid($user_id) {
+        $sql = "SELECT unit_id FROM kabid_units WHERE user_id = ?";
+        $query = $this->db->query($sql, array($user_id));
+        return array_column($query->result_array(), 'unit_id');
+    }
+
+    public function clearKabidUnits($user_id) {
+        $sql = "DELETE FROM kabid_units WHERE user_id = ?";
+        return $this->db->query($sql, array($user_id));
+    }
+
+    public function assignUnitToKabid($user_id, $unit_id) {
+        $sql = "INSERT INTO kabid_units (user_id, unit_id) VALUES (?, ?)";
+        return $this->db->query($sql, array($user_id, $unit_id));
+    }
 }

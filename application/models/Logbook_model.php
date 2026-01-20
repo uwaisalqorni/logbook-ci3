@@ -114,8 +114,8 @@ class Logbook_model extends CI_Model {
         return $row['total'];
     }
 
-    public function getAllLogbooks($start_date, $end_date, $unit_id = null, $limit = null, $offset = null) {
-        $sql = "SELECT l.*, u.name as user_name, un.name as unit_name 
+    public function getAllLogbooks($start_date, $end_date, $unit_id = null, $role = null, $limit = null, $offset = null) {
+        $sql = "SELECT l.*, u.name as user_name, u.role, un.name as unit_name 
                 FROM logbooks l 
                 JOIN users u ON l.user_id = u.id 
                 JOIN units un ON u.unit_id = un.id 
@@ -124,8 +124,21 @@ class Logbook_model extends CI_Model {
         $binds = array($start_date, $end_date);
 
         if ($unit_id) {
-            $sql .= " AND u.unit_id = ?";
-            $binds[] = $unit_id;
+            if (is_array($unit_id)) {
+                if (!empty($unit_id)) {
+                    $placeholders = implode(',', array_fill(0, count($unit_id), '?'));
+                    $sql .= " AND u.unit_id IN ($placeholders)";
+                    $binds = array_merge($binds, $unit_id);
+                }
+            } else {
+                $sql .= " AND u.unit_id = ?";
+                $binds[] = $unit_id;
+            }
+        }
+
+        if ($role) {
+            $sql .= " AND u.role = ?";
+            $binds[] = $role;
         }
         
         $sql .= " ORDER BY l.date DESC, u.name ASC";
@@ -135,6 +148,43 @@ class Logbook_model extends CI_Model {
             $binds[] = (int)$limit;
             $binds[] = (int)$offset;
         }
+        
+        $query = $this->db->query($sql, $binds);
+        return $query->result_array();
+    }
+
+    public function getLogbookReportDetails($start_date, $end_date, $unit_id = null, $role = null) {
+        $sql = "SELECT l.id as logbook_id, l.date, l.status as logbook_status,
+                       u.name as user_name, u.nik, u.role, un.name as unit_name,
+                       ld.description, ld.output, ld.kendala, ld.status as activity_status, at.name as activity_name
+                FROM logbooks l 
+                JOIN users u ON l.user_id = u.id 
+                JOIN units un ON u.unit_id = un.id 
+                LEFT JOIN logbook_details ld ON l.id = ld.logbook_id
+                LEFT JOIN activity_types at ON ld.activity_type_id = at.id
+                WHERE l.date BETWEEN ? AND ?";
+        
+        $binds = array($start_date, $end_date);
+
+        if ($unit_id) {
+            if (is_array($unit_id)) {
+                if (!empty($unit_id)) {
+                    $placeholders = implode(',', array_fill(0, count($unit_id), '?'));
+                    $sql .= " AND u.unit_id IN ($placeholders)";
+                    $binds = array_merge($binds, $unit_id);
+                }
+            } else {
+                $sql .= " AND u.unit_id = ?";
+                $binds[] = $unit_id;
+            }
+        }
+
+        if ($role) {
+            $sql .= " AND u.role = ?";
+            $binds[] = $role;
+        }
+        
+        $sql .= " ORDER BY l.date ASC, u.name ASC, ld.start_time ASC";
         
         $query = $this->db->query($sql, $binds);
         return $query->result_array();
@@ -211,16 +261,106 @@ class Logbook_model extends CI_Model {
     }
     
     // --- For Head of Unit ---
-    public function getPendingLogbooksByUnit($unit_id) {
-        $sql = "SELECT l.*, u.name as user_name, u.nik FROM logbooks l JOIN users u ON l.user_id = u.id WHERE u.unit_id = ? AND l.status = 'submitted' ORDER BY l.date ASC";
-        $query = $this->db->query($sql, array($unit_id));
+    public function getPendingLogbooksByUnit($unit_id, $role = null) {
+        $sql = "SELECT l.*, u.name as user_name, u.nik FROM logbooks l JOIN users u ON l.user_id = u.id WHERE l.status = 'submitted'";
+        $binds = array();
+
+        if (is_array($unit_id)) {
+            if (empty($unit_id)) {
+                return []; // No units assigned
+            }
+            $placeholders = implode(',', array_fill(0, count($unit_id), '?'));
+            $sql .= " AND u.unit_id IN ($placeholders)";
+            $binds = array_merge($binds, $unit_id);
+        } else {
+            $sql .= " AND u.unit_id = ?";
+            $binds[] = $unit_id;
+        }
+        
+        if ($role) {
+            $sql .= " AND u.role = ?";
+            $binds[] = $role;
+        }
+        
+        $sql .= " ORDER BY l.date ASC";
+        $query = $this->db->query($sql, $binds);
         return $query->result_array();
     }
 
-    public function getHistoryLogbooksByUnit($unit_id) {
-        $sql = "SELECT l.*, u.name as user_name, u.nik FROM logbooks l JOIN users u ON l.user_id = u.id WHERE u.unit_id = ? AND l.status IN ('approved', 'rejected') ORDER BY l.date DESC";
-        $query = $this->db->query($sql, array($unit_id));
+    public function getHistoryLogbooksByUnit($unit_id, $role = null) {
+        $sql = "SELECT l.*, u.name as user_name, u.nik FROM logbooks l JOIN users u ON l.user_id = u.id WHERE l.status IN ('approved', 'rejected')";
+        $binds = array();
+
+        if (is_array($unit_id)) {
+            if (empty($unit_id)) {
+                return []; // No units assigned
+            }
+            $placeholders = implode(',', array_fill(0, count($unit_id), '?'));
+            $sql .= " AND u.unit_id IN ($placeholders)";
+            $binds = array_merge($binds, $unit_id);
+        } else {
+            $sql .= " AND u.unit_id = ?";
+            $binds[] = $unit_id;
+        }
+        
+        if ($role) {
+            $sql .= " AND u.role = ?";
+            $binds[] = $role;
+        }
+        
+        $sql .= " ORDER BY l.date DESC";
+        $query = $this->db->query($sql, $binds);
         return $query->result_array();
+    }
+
+    public function countPendingLogbooksByUnit($unit_id, $role = null) {
+        $sql = "SELECT COUNT(*) as total FROM logbooks l JOIN users u ON l.user_id = u.id WHERE l.status = 'submitted'";
+        $binds = array();
+
+        if (is_array($unit_id)) {
+            if (empty($unit_id)) {
+                return 0;
+            }
+            $placeholders = implode(',', array_fill(0, count($unit_id), '?'));
+            $sql .= " AND u.unit_id IN ($placeholders)";
+            $binds = array_merge($binds, $unit_id);
+        } else {
+            $sql .= " AND u.unit_id = ?";
+            $binds[] = $unit_id;
+        }
+        
+        if ($role) {
+            $sql .= " AND u.role = ?";
+            $binds[] = $role;
+        }
+        
+        $query = $this->db->query($sql, $binds);
+        return $query->row()->total;
+    }
+
+    public function countHistoryLogbooksByUnit($unit_id, $role = null) {
+        $sql = "SELECT COUNT(*) as total FROM logbooks l JOIN users u ON l.user_id = u.id WHERE l.status IN ('approved', 'rejected')";
+        $binds = array();
+
+        if (is_array($unit_id)) {
+            if (empty($unit_id)) {
+                return 0;
+            }
+            $placeholders = implode(',', array_fill(0, count($unit_id), '?'));
+            $sql .= " AND u.unit_id IN ($placeholders)";
+            $binds = array_merge($binds, $unit_id);
+        } else {
+            $sql .= " AND u.unit_id = ?";
+            $binds[] = $unit_id;
+        }
+        
+        if ($role) {
+            $sql .= " AND u.role = ?";
+            $binds[] = $role;
+        }
+        
+        $query = $this->db->query($sql, $binds);
+        return $query->row()->total;
     }
 
     // --- For Management ---
@@ -262,6 +402,18 @@ class Logbook_model extends CI_Model {
         return $row['total'];
     }
 
+    public function countSubmittedLogbooksByUnitToday($unit_id) {
+        $sql = "SELECT COUNT(DISTINCT l.user_id) as total 
+                FROM logbooks l 
+                JOIN users u ON l.user_id = u.id 
+                WHERE l.date = CURRENT_DATE 
+                AND u.unit_id = ? 
+                AND l.status IN ('submitted', 'approved', 'rejected', 'revision')";
+        $query = $this->db->query($sql, array($unit_id));
+        $row = $query->row_array();
+        return $row['total'];
+    }
+
     public function addValidation($data) {
         $sql = "INSERT INTO validations (logbook_id, validator_id, status, notes) VALUES (?, ?, ?, ?)";
         $binds = array(
@@ -277,5 +429,18 @@ class Logbook_model extends CI_Model {
         $sql = "SELECT * FROM validations WHERE logbook_id = ? ORDER BY validated_at DESC LIMIT 1";
         $query = $this->db->query($sql, array($logbook_id));
         return $query->row_array();
+    }
+    public function getEffectivenessByUnit($unit_id, $start_date, $end_date) {
+        $sql = "SELECT u.name as user_name, u.nik, l.date, 
+                       SUM(TIMESTAMPDIFF(MINUTE, ld.start_time, ld.end_time)) as total_minutes
+                FROM users u
+                JOIN logbooks l ON u.id = l.user_id
+                JOIN logbook_details ld ON l.id = ld.logbook_id
+                WHERE u.unit_id = ? AND l.date BETWEEN ? AND ? AND l.status IN ('submitted', 'approved', 'rejected')
+                GROUP BY u.id, l.date
+                ORDER BY l.date DESC, u.name ASC";
+        
+        $query = $this->db->query($sql, array($unit_id, $start_date, $end_date));
+        return $query->result_array();
     }
 }

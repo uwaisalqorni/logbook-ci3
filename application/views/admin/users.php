@@ -51,6 +51,7 @@
                         <select name="role" class="form-control" required>
                             <option value="employee">Employee (Perawat/Bidan)</option>
                             <option value="head">Head of Unit (Kepala Ruangan)</option>
+                            <option value="kabid">Kabid(Kepala Bidang)</option>
                             <option value="management">Management</option>
                             <option value="admin">Admin</option>
                         </select>

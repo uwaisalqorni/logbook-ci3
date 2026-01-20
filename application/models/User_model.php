@@ -32,8 +32,14 @@ class User_model extends CI_Model {
     }
 
     public function getAllUsers() {
-        $sql = "SELECT u.*, un.name as unit_name FROM users u LEFT JOIN units un ON u.unit_id = un.id ORDER BY u.name ASC";
+        $sql = "SELECT u.*, un.name as user_unit_name FROM users u LEFT JOIN units un ON u.unit_id = un.id ORDER BY u.name ASC";
         $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
+    public function getUsersByRole($role) {
+        $sql = "SELECT u.*, un.name as unit_name FROM users u LEFT JOIN units un ON u.unit_id = un.id WHERE u.role = ? ORDER BY u.name ASC";
+        $query = $this->db->query($sql, array($role));
         return $query->result_array();
     }
 
@@ -90,6 +96,13 @@ class User_model extends CI_Model {
     public function countActiveEmployees() {
         $sql = "SELECT COUNT(*) as total FROM users WHERE role = 'employee' AND status = 'active'";
         $query = $this->db->query($sql);
+        $row = $query->row_array();
+        return $row['total'];
+    }
+
+    public function countActiveEmployeesByUnit($unit_id) {
+        $sql = "SELECT COUNT(*) as total FROM users WHERE role = 'employee' AND status = 'active' AND unit_id = ?";
+        $query = $this->db->query($sql, array($unit_id));
         $row = $query->row_array();
         return $row['total'];
     }

@@ -151,4 +151,41 @@ class Admin extends CI_Controller {
         ];
         $this->load->view('admin/users', ['data' => $data]);
     }
+    public function user_groups() {
+        $message = '';
+
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            $user_id = $this->input->post('user_id');
+            $unit_ids = $this->input->post('unit_ids'); // Array of unit IDs
+
+            if ($user_id) {
+                // Clear existing assignments
+                $this->Unit_model->clearKabidUnits($user_id);
+
+                // Add new assignments
+                if (!empty($unit_ids)) {
+                    foreach ($unit_ids as $unit_id) {
+                        $this->Unit_model->assignUnitToKabid($user_id, $unit_id);
+                    }
+                }
+                $message = 'Group pengguna berhasil diperbarui';
+            }
+        }
+
+        $kabids = $this->User_model->getUsersByRole('kabid');
+        $units = $this->Unit_model->getAllUnits();
+
+        // Get assignments for each kabid
+        foreach ($kabids as &$kabid) {
+            $kabid['assigned_units'] = $this->Unit_model->getUnitsByKabid($kabid['id']);
+        }
+
+        $data = [
+            'title' => 'Group Pengguna (Kabid)',
+            'kabids' => $kabids,
+            'units' => $units,
+            'message' => $message
+        ];
+        $this->load->view('admin/user_groups', ['data' => $data]);
+    }
 }

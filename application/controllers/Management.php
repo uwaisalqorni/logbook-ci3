@@ -49,7 +49,7 @@ class Management extends CI_Controller {
         $limit = 10;
         $offset = ($page - 1) * $limit;
 
-        $logbooks = $this->Logbook_model->getAllLogbooks($start_date, $end_date, $unit_id, $limit, $offset);
+        $logbooks = $this->Logbook_model->getAllLogbooks($start_date, $end_date, $unit_id, null, $limit, $offset);
         $total_logbooks = $this->Logbook_model->countAllLogbooks($start_date, $end_date, $unit_id);
         $total_pages = ceil($total_logbooks / $limit);
         

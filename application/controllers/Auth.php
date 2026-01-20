@@ -105,6 +105,8 @@ class Auth extends CI_Controller {
             redirect('employee/dashboard');
         } elseif ($role == 'head') {
             redirect('head/dashboard');
+        } elseif ($role == 'kabid') {
+            redirect('kabid/dashboard');
         } elseif ($role == 'management') {
             redirect('management/dashboard');
         } else {
